@@ -98,3 +98,36 @@ gsap.utils.toArray(".card").forEach((card, i) => {
 
 
 
+
+
+ document.addEventListener("DOMContentLoaded", function () {
+    const toggles = document.querySelectorAll(".faq2-toggle");
+
+    toggles.forEach((toggle) => {
+      toggle.addEventListener("click", function () {
+        const faqBox = this.parentElement;
+        const icon = this.querySelector(".faq2-icon");
+        const content = faqBox.querySelector(".faq2-content");
+
+        // Close any other open FAQ
+        document.querySelectorAll(".faq2-box.active").forEach((box) => {
+          if (box !== faqBox) {
+            box.classList.remove("active");
+            box.querySelector(".faq2-icon").textContent = "+";
+            box.querySelector(".faq2-content").style.maxHeight = null;
+          }
+        });
+
+        // Toggle current FAQ
+        faqBox.classList.toggle("active");
+
+        if (faqBox.classList.contains("active")) {
+          icon.textContent = "–";
+          content.style.maxHeight = content.scrollHeight + "px";
+        } else {
+          icon.textContent = "+";
+          content.style.maxHeight = null;
+        }
+      });
+    });
+  });
