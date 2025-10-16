@@ -98,17 +98,3 @@ gsap.utils.toArray(".card").forEach((card, i) => {
 
 
 
-const faqs2 = document.querySelectorAll(".faq-box");
-
-faqs2.forEach(box => {
-  const toggle = box.querySelector(".faq-toggle");
-  toggle.addEventListener("click", () => {
-    // Toggle active
-    box.classList.toggle("active");
-
-    // Close others
-    faqs2.forEach(other => {
-      if (other !== box) other.classList.remove("active");
-    });
-  });
-});
