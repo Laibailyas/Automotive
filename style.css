@@ -705,9 +705,9 @@ body {
 }
 
 .service-item h3 {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 500;
-  color: #c14a26;
+  color: #fff;
   margin-bottom: 1rem;
 }
 
@@ -728,7 +728,7 @@ body {
 
 @media (max-width: 768px) {
   .service-item h3 {
-    font-size: 1.5rem;
+    font-size: 20px;
     margin-bottom: 0.5rem;
   }
 
@@ -857,7 +857,7 @@ hr {
 .project-participations {
   background-color: #f5f6f3;
   /* light background */
-  padding: 8rem 2rem 4rem;
+  padding: 10rem 2rem;
   color: #822639;
   /* burgundy text */
   font-family: sans-serif;
@@ -885,9 +885,31 @@ hr {
   margin: 0 auto;
 }
 
+
+
 .left-column {
   flex: 1;
   min-width: 280px;
+}
+
+.clients{
+  background-color: #6a0f1b;
+  padding: 4rem 2rem 1rem;
+}
+
+.clients .left-column{
+  display: flex;
+  justify-content: space-between;
+}
+
+.clients .title{
+  width: 300px;
+  color: #fff;
+}
+
+.clients .description{
+  width: calc(85% - 300px);
+  color: #fff;
 }
 
 .subtitle {
@@ -924,7 +946,7 @@ hr {
   }
 
   .project-participations {
-    padding: 6rem 1.25rem 2rem;
+    padding: 6rem 1.25rem;
   }
 }
 
@@ -1622,6 +1644,8 @@ hr {
   transition: opacity 0.3s ease;
   top: 1.5rem;
   color: #fff;
+  left: 0;
+  padding: 0 12px;
 }
 
 .sliding-btn .fa-minus {
@@ -1745,6 +1769,14 @@ hr {
   .fascination-left {
     width: 88%;
   }
+
+  .clients .left-column{
+    flex-direction: column;
+  }
+
+  .clients .description{
+    width: 90%;
+  }
 }
 
 @media (max-width:768px) {
@@ -1814,6 +1846,10 @@ hr {
     margin-bottom: 1rem;
   }
 
+  .clients .title{
+    width: 230px;
+  }
+
   .moving-text {
     font-size: 1.75rem;
   }
@@ -1830,6 +1866,10 @@ hr {
 
   .contact-form {
     padding: 2rem 1.5rem;
+  }
+
+  .clients{
+    padding: 3rem 1.25rem 1rem;
   }
 
   .nav-container {
