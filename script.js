@@ -1,8 +1,19 @@
 const menuToggle = document.getElementById("menu-toggle");
 const navLinks = document.querySelector(".nav-links");
+const links = navLinks.querySelectorAll("a"); // ya .nav-link agar tumhare link ki class ye hai
 
-menuToggle.addEventListener("click", () => {
-  navLinks.classList.toggle("active");
+// menuToggle.addEventListener("click", () => {
+//   navLinks.classList.toggle("active");
+// });
+
+// har link per click event lagao
+links.forEach(link => {
+  link.addEventListener("click", () => {
+    // sab se active class hatao
+    links.forEach(l => l.classList.remove("active"));
+    // jis per click hua us per add karo
+    link.classList.add("active");
+  });
 });
 
 
