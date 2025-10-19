@@ -48,11 +48,13 @@ const tl = gsap.timeline({
   }
 });
 
+
 services.forEach((service, i) => {
   const content = service.querySelector(".service-content");
+  const image = service.querySelector(".service-image");
 
-  // Open
-  tl.to(content, {
+  // Open animation
+  tl.to([content, image], {
     maxHeight: 400,
     opacity: 1,
     y: 0,
@@ -60,13 +62,13 @@ services.forEach((service, i) => {
     duration: 1
   }, "+=0.2");
 
-  // Hold (pause)
+  // Hold
   tl.to({}, { duration: 0.6 });
 
-  // Close
-  tl.to(content, {
+  // Close animation with fadeout
+  tl.to([content, image], {
     maxHeight: 0,
-    opacity: 0,
+    opacity: 0,      // smooth fade
     y: 25,
     ease: "power2.inOut",
     duration: 1
@@ -239,3 +241,122 @@ document.querySelectorAll(".sliding-card").forEach(card => {
     open = !open;
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// cursor 
+
+
+
+
+const cursor = document.querySelector(".cursor-dot");
+  const trail = document.querySelector(".cursor-trail");
+  const trailCoords = [];
+  const maxTrail = 12;
+
+  let mouseX = 0, mouseY = 0;
+  let cursorX = 0, cursorY = 0;
+
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    trailCoords.push({ x: mouseX, y: mouseY });
+    if (trailCoords.length > maxTrail) trailCoords.shift();
+  });
+
+  function animateCursor() {
+    // smooth follow for main glowing dot
+    cursorX += (mouseX - cursorX) * 0.15;
+    cursorY += (mouseY - cursorY) * 0.15;
+    cursor.style.left = cursorX + "px";
+    cursor.style.top = cursorY + "px";
+
+    // trailing blur follow
+    if (trailCoords.length > 1) {
+      const avgX = trailCoords.reduce((a, b) => a + b.x, 0) / trailCoords.length;
+      const avgY = trailCoords.reduce((a, b) => a + b.y, 0) / trailCoords.length;
+      trail.style.left = avgX + "px";
+      trail.style.top = avgY + "px";
+    }
+
+    requestAnimationFrame(animateCursor);
+  }
+
+  animateCursor();
+
+
+
+
+
+
+
+
+
+
+  // pre loader 
+
+  window.addEventListener("load", () => {
+    const preloader = document.querySelector(".preloader");
+
+    // let the animations finish
+    setTimeout(() => {
+      preloader.classList.add("hide");
+      setTimeout(() => preloader.remove(), 500);
+    }, 1000); // total duration now matches animations
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+  // 2nd section animation 
+
+
+  // Wrap every word in a <span>
+const h2 = document.getElementById("fascination-text");
+h2.innerHTML = h2.textContent
+  .split(" ")
+  .map(word => `<span class="word">${word}</span>`)
+  .join(" ");
+
+
+
+  // Ensure GSAP and ScrollTrigger are loaded
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.utils.toArray(".fascination-left .word").forEach((word, i) => {
+  gsap.to(word, {
+    scrollTrigger: {
+      trigger: word,
+      start: "top 80%",   // when the word is near viewport top
+      end: "bottom 20%",  // when it moves further up
+      toggleActions: "play reverse play reverse",
+    },
+    color: "#000", // animate to black
+    ease: "none",
+  });
+});
+
