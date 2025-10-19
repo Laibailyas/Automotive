@@ -12,7 +12,21 @@
 </head>
 
 <body>
-  <header class="navbar">
+  
+  <!-- pre loader  -->
+
+  <div class="preloader">
+  <div class="layer layer-1"></div>
+  <div class="layer layer-2"></div>
+  <div class="layer layer-3"></div>
+</div>
+
+
+  <!-- hero section  -->
+
+  <section class="hero-section">
+
+      <header class="navbar">
     <div class="nav-container">
       <h2 class="logo">Expart Global</h2>
       <div class="nav-links">
@@ -34,15 +48,39 @@
     <a href="#" class="work-btn">Work with us</a>
   </header>
 
-  <!-- hero section  -->
 
-  <section class="hero-section">
     <video autoplay muted loop playsinline class="background-video">
-      <source src="./images/Cogz_H264_1080p.mov" type="video/mp4">
-      <!-- fallback -->
+      <source src="./images/Cogz_H264_1080p (1)compressed.mp4" type="video/mp4">
     </video>
     <div class="hero-content">
-      <img src="./images/image0.png" alt="Expart Global Logo" class="hero-logo" />
+      
+<div class="logo-flex-wrap">
+  <div class="logo-circle">
+    <svg viewBox="0 0 400 400" class="circle-svg">
+      <defs>
+        <path
+          id="tinyCirclePath"
+          d="M200,200 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"
+        />
+      </defs>
+      <text class="circle-text">
+        <textPath href="#tinyCirclePath" startOffset="50%">
+          YOUR TRUSTED SOURCE FOR VEHICLES • YOUR TRUSTED SOURCE FOR VEHICLES •
+        </textPath>
+      </text>
+    </svg>
+
+    <img src="./images/image0.png" alt="Expart Global Logo" class="hero-logo" />
+  </div>
+
+  <h1 class="hero-heading-side">Expart Global LLC</h1>
+</div>
+
+
+
+
+
+
       <h1 class="hero-title">Driven by Trust. Defined by Quality.</h1>
       <p class="hero-subtitle">
         Automotive solutions, testing, certification & global trade — all in one trusted source.
@@ -82,13 +120,17 @@
     </div>
   </div>
 
+
+
+
+  
   <!-- 2nd section  -->
   <section class="fascination-section">
     <div class="fascination-container">
       <div class="fascination-left">
-        <h2>In a world where projects are becoming increasingly complex, having a partner who understands every step is
-          essential</h2>
-      </div>
+  <h2 id="fascination-text">In a world where projects are becoming increasingly complex, having a partner who understands every step is essential</h2>
+</div>
+
 
       <div class="fascination-right">
         <h3>Who we are?</h3>
@@ -138,7 +180,11 @@
       <p class="service-subtitle">Why us?</p>
 
       <div class="service-item">
-        <h3>At ExpartGlobal we handle every stage of the process in-house</h3>
+
+        <div class="sertitle" style="display: flex;">
+          <img class="service-image" src="https://www.serienreif.com/wp-content/uploads/2025/06/budgetsundfristen.svg" alt="Service image">
+           <h3>At ExpartGlobal we handle every stage of the process in-house</h3>\
+        </div>
         <div class="service-content">
           <p>
             Find top‑quality vehicle spare parts and accessories, from essential replacements to stylish
@@ -148,8 +194,11 @@
       </div>
 
       <div class="service-item">
+        <div class="sertitle" style="display: flex;">
+                    <img class="service-image" src="https://www.serienreif.com/wp-content/uploads/2025/06/budgetsundfristen.svg" alt="Service image">
         <h3>Experienced team delivering trusted automotive solutions</h3>
-        <div class="service-content">
+        </div>
+          <div class="service-content">
           <p>
             Buy your next car with confidence—our used car sales offer quality-checked vehicles at great prices, ready
             for the road.
@@ -158,8 +207,11 @@
       </div>
 
       <div class="service-item">
+        <div class="sertitle" style="display: flex;">
+                    <img class="service-image" src="https://www.serienreif.com/wp-content/uploads/2025/06/budgetsundfristen.svg" alt="Service image">
         <h3>Wide range of quality products and services</h3>
-        <div class="service-content">
+        </div>
+          <div class="service-content">
           <p>
             Ensure your vehicle’s performance and safety with our expert technical testing and analysis service—accurate
             results, trusted diagnostics.
@@ -168,8 +220,11 @@
       </div>
 
       <div class="service-item">
+        <div class="sertitle" style="display: flex;">
+                    <img class="service-image" src="https://www.serienreif.com/wp-content/uploads/2025/06/budgetsundfristen.svg" alt="Service image">
         <h3>Reliable testing, certification, and safety assessments </h3>
-        <div class="service-content">
+        </div>
+          <div class="service-content">
           <p>
             Get reliable certification for products, vehicles, and equipment—including pressurized containers—with our
             expert inspection and compliance service.
@@ -178,8 +233,11 @@
       </div>
 
       <div class="service-item">
+        <div class="sertitle" style="display: flex;">
+                    <img class="service-image" src="https://www.serienreif.com/wp-content/uploads/2025/06/budgetsundfristen.svg" alt="Service image">
         <h3>Seamless import/export support for global reach</h3>
-        <div class="service-content">
+        </div>
+          <div class="service-content">
           <p>
             Promote safer roads with our advanced road safety testing service—accurate assessments, expert analysis, and
             proven results for every journey.
@@ -188,8 +246,11 @@
       </div>
 
       <div class="service-item">
+        <div class="sertitle" style="display: flex;">
+                    <img class="service-image" src="https://www.serienreif.com/wp-content/uploads/2025/06/budgetsundfristen.svg" alt="Service image">
         <h3>Dedicated to customer satisfaction and transparent service</h3>
-        <div class="service-content">
+        </div>
+          <div class="service-content">
           <p>
             Simplify global trade with our import and export service—efficient handling, reliable documentation, and
             smooth delivery across borders.
@@ -716,7 +777,7 @@
           <label for="message">Message</label>
           <textarea id="message" name="message" placeholder="Tell us the purpose"></textarea>
 
-          <button type="submit">Submit</button>
+          <button type="submit" class="submit">Submit</button>
         </form>
       </div>
     </div>
@@ -738,7 +799,8 @@
     </div> -->
   </section>
 
-
+<div class="cursor-dot"></div>
+<div class="cursor-trail"></div>
 
 
 
@@ -753,8 +815,13 @@
   <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
   <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
+  <script src="entranceanimations.js"></script>
+
+
+
+
+  
 </body>
 
 
 </html>
-
