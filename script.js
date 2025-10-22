@@ -75,6 +75,56 @@ services.forEach((service, i) => {
   });
 });
 
+// gsap.registerPlugin(ScrollTrigger);
+
+// const services = gsap.utils.toArray(".service-item");
+
+// const tl = gsap.timeline({
+//   scrollTrigger: {
+//     trigger: ".service-scroll-section",
+//     start: "top top",
+//     end: "+=5000", // slightly longer scroll distance for smoother pacing
+//     scrub: 1,      // smoother sync with scroll
+//     pin: true,
+//     anticipatePin: 1
+//   }
+// });
+
+// services.forEach((service, i) => {
+//   const content = service.querySelector(".service-content");
+//   const image = service.querySelector(".service-image");
+
+//   // Initial state
+//   gsap.set([content, image], {
+//     opacity: 0,
+//     y: 50,
+//     maxHeight: 0
+//   });
+
+//   // Open (smooth fade + slide up)
+//   tl.to([content, image], {
+//     maxHeight: 400,
+//     opacity: 1,
+//     y: 0,
+//     ease: "power3.out",
+//     duration: 1.4,
+//     stagger: 0.15 // slight delay between image and text
+//   }, "+=0.3");
+
+//   // Hold slightly before transitioning out
+//   tl.to({}, { duration: 0.8 });
+
+//   // Smooth crossfade to next
+//   tl.to([content, image], {
+//     opacity: 0,
+//     y: -40,
+//     maxHeight: 0,
+//     ease: "power2.inOut",
+//     duration: 1.2
+//   }, "+=0.2");
+// });
+
+
 
 
 
@@ -85,18 +135,34 @@ services.forEach((service, i) => {
 
 const faqs = document.querySelectorAll(".faq-box");
 
-faqs.forEach(box => {
+faqs.forEach((box) => {
   const toggle = box.querySelector(".faq-toggle");
-  toggle.addEventListener("click", () => {
-    // Toggle active
-    box.classList.toggle("active");
+  const content = box.querySelector(".faq-content");
 
-    // Close others
-    faqs.forEach(other => {
-      if (other !== box) other.classList.remove("active");
-    });
+  toggle.addEventListener("click", () => {
+    // If already active, collapse
+    if (box.classList.contains("active")) {
+      content.style.maxHeight = content.scrollHeight + "px"; // set to current height
+      requestAnimationFrame(() => {
+        content.style.maxHeight = "0";
+      });
+      box.classList.remove("active");
+    } else {
+      // Close others
+      faqs.forEach((other) => {
+        if (other !== box) {
+          other.classList.remove("active");
+          other.querySelector(".faq-content").style.maxHeight = "0";
+        }
+      });
+
+      // Expand this one
+      box.classList.add("active");
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
   });
 });
+
 
 if (window.innerWidth > 768) {
   gsap.registerPlugin(ScrollTrigger);
@@ -121,82 +187,173 @@ if (window.innerWidth > 768) {
 
 
 
+// ----------------------------------------------------
 
 
 
 
 
-const splide = new Splide('.splide', {
-  type: 'slide',
-  // perPage: 4,
-  gap: '1.5rem',
-  pagination: false,
-  arrows: true,
-  speed: 700, // timing sync with transform animation
-}).mount();
 
-const cards = document.querySelectorAll('.sliding-card');
 
-const transforms = [
-  [
-    'translateY(12%) rotate(-8deg)',
-    'translateY(3.00498%) rotate(-4.00332deg)',
-    'translateY(0%) rotate(-0.006639deg)',
-    'translateY(3.00498%) rotate(4.00332deg)',
-    'translateY(12%) rotate(8deg)',
-    'translateY(26.9851%) rotate(11.9967deg)'
-  ],
-  [
-    'translateY(27%) rotate(-12deg)',
-    'translateY(12.01%) rotate(-8.00332deg)',
-    'translateY(3.00997%) rotate(-4.00664deg)',
-    'translateY(0%) rotate(0.0033195deg)',
-    'translateY(3%) rotate(4deg)',
-    'translateY(11.99%) rotate(7.99668deg)'
-  ],
-  [
-    'translateY(48%) rotate(-16deg)',
-    'translateY(27.0149%) rotate(-12.0033deg)',
-    'translateY(12.0199%) rotate(-8.00664deg)',
-    'translateY(2.99502%) rotate(-3.99668deg)',
-    'translateY(0%) rotate(0deg)',
-    'translateY(2.99502%) rotate(3.99668deg)'
-  ]
-];
 
-let index = 0;
+const cards = document.querySelectorAll(".sliding-card");
+const nextBtn = document.querySelector(".next");
+const prevBtn = document.querySelector(".prev");
 
-function applyTransforms() {
-  cards.forEach((card, i) => {
-    card.style.transform = transforms[index][i];
-  });
+let activeIndex = 0;
+let settings = getSettings();
+
+function getSettings() {
+  const w = window.innerWidth;
+
+  if (w > 900) return {
+    rotate: true, active: 2
+  };
+
+  if (w > 768 && w < 900) return {
+    rotate: true, active: 1
+  };
+
+  if (w < 768 && w > 600) return {
+    rotate: false, active: 1
+  };
+
+  if (w < 600) return {
+    rotate: false, active: 0
+  }
+
 }
 
-splide.on('move', (newIndex, oldIndex) => {
-  if (newIndex > oldIndex && index < transforms.length - 1) index++;
-  else if (newIndex < oldIndex && index > 0) index--;
-  applyTransforms();
+function updateCards(direction = "none", animate = true) {
+  const {
+    // visible,
+    rotate, active } = settings;
+  const tl = gsap.timeline();
+
+
+
+  const containerWidth = document.querySelector('.sliding-cards').offsetWidth; // ya window.innerWidth
+  function getSpacingPercent() {
+    const w = window.innerWidth;
+
+    if (w >= 1200) return 24;  // large desktop
+    if (w >= 900 && w < 1200) return 29;  // large desktop
+    if (w >= 768 && w < 900) return 45;  // medium desktop
+    if (w >= 600 && w < 768) return 48;  // tablet
+    return 72;                  // mobile
+  }
+  const spacingPercent = getSpacingPercent();
+
+
+
+  cards.forEach((card, i) => {
+    const offset = i - activeIndex - active;
+    const absOffset = Math.abs(offset);
+
+    // spacing in pixels calculated from percentage
+    let x = (containerWidth * spacingPercent / 100) * offset + (containerWidth * 5 / 100); // 5% extra offset
+    // const y = rotate ? absOffset * 25 : 0;
+    const y = rotate ? absOffset * (25 + Math.abs(offset) * 10) : 0;
+
+
+
+
+    // screen ke hisaab se responsive value
+    // const responsiveY = () => {
+    //     const w = window.innerWidth;
+    //     if (w >= 1200) return 75; // large desktop
+    //     if (w >= 992) return 70;  // medium desktop
+    //     if (w >= 768) return 65;  // tablet
+    //     return 50;                 // mobile
+    // }
+
+    // const specialY = responsiveY();
+
+    const rotation = rotate ? offset * 6 : 0;
+
+    tl.to(card, {
+      x,
+      y,
+      rotate: rotation,
+      zIndex: 100 - absOffset,
+      duration: animate ? 0.7 : 0,
+      ease: "power3.out",
+    }, 0);
+  });
+
+
+
+
+
+  // ✅ Correct disable logic — ensures full scroll till last card
+  const maxIndex = cards.length - (active + 1);
+  prevBtn.disabled = activeIndex <= 0;
+  nextBtn.disabled = activeIndex >= maxIndex;
+
+}
+
+nextBtn.addEventListener("click", () => {
+  const { active } = settings;
+  const maxIndex = cards.length - (active + 1);
+  if (activeIndex < maxIndex) {
+    activeIndex++;
+    updateCards("next");
+  }
 });
 
-applyTransforms();
+prevBtn.addEventListener("click", () => {
+  if (activeIndex > 0) {
+    activeIndex--;
+    updateCards("prev");
+  }
+});
 
-const prevArrow = document.querySelector(".splide__arrow--prev");
-if (prevArrow) {
-  const svg = prevArrow.querySelector("svg");
-  if (svg) svg.remove();
-  prevArrow.innerHTML = '<i class="fas fa-arrow-left"></i>';
-  prevArrow.setAttribute("aria-label", "Previous slide");
-}
+window.addEventListener("resize", () => {
+  settings = getSettings();
+  updateCards("none", false);
+});
 
-// Next Arrow
-const nextArrow = document.querySelector(".splide__arrow--next");
-if (nextArrow) {
-  const svg = nextArrow.querySelector("svg");
-  if (svg) svg.remove();
-  nextArrow.innerHTML = '<i class="fas fa-arrow-right"></i>';
-  nextArrow.setAttribute("aria-label", "Next slide");
-}
+settings = getSettings();
+activeIndex = 0;
+updateCards("none", true);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ----------------------------------------------------------
 
 document.querySelectorAll(".sliding-card").forEach(card => {
   const btn = card.querySelector(".sliding-btn");
@@ -256,6 +413,22 @@ document.querySelectorAll(".sliding-card").forEach(card => {
 
 
 
+// ----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -266,39 +439,39 @@ document.querySelectorAll(".sliding-card").forEach(card => {
 
 
 const cursor = document.querySelector(".cursor-dot");
-  const trail = document.querySelector(".cursor-trail");
-  const trailCoords = [];
-  const maxTrail = 12;
+const trail = document.querySelector(".cursor-trail");
+const trailCoords = [];
+const maxTrail = 12;
 
-  let mouseX = 0, mouseY = 0;
-  let cursorX = 0, cursorY = 0;
+let mouseX = 0, mouseY = 0;
+let cursorX = 0, cursorY = 0;
 
-  document.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    trailCoords.push({ x: mouseX, y: mouseY });
-    if (trailCoords.length > maxTrail) trailCoords.shift();
-  });
+document.addEventListener("mousemove", (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  trailCoords.push({ x: mouseX, y: mouseY });
+  if (trailCoords.length > maxTrail) trailCoords.shift();
+});
 
-  function animateCursor() {
-    // smooth follow for main glowing dot
-    cursorX += (mouseX - cursorX) * 0.15;
-    cursorY += (mouseY - cursorY) * 0.15;
-    cursor.style.left = cursorX + "px";
-    cursor.style.top = cursorY + "px";
+function animateCursor() {
+  // smooth follow for main glowing dot
+  cursorX += (mouseX - cursorX) * 0.15;
+  cursorY += (mouseY - cursorY) * 0.15;
+  cursor.style.left = cursorX + "px";
+  cursor.style.top = cursorY + "px";
 
-    // trailing blur follow
-    if (trailCoords.length > 1) {
-      const avgX = trailCoords.reduce((a, b) => a + b.x, 0) / trailCoords.length;
-      const avgY = trailCoords.reduce((a, b) => a + b.y, 0) / trailCoords.length;
-      trail.style.left = avgX + "px";
-      trail.style.top = avgY + "px";
-    }
-
-    requestAnimationFrame(animateCursor);
+  // trailing blur follow
+  if (trailCoords.length > 1) {
+    const avgX = trailCoords.reduce((a, b) => a + b.x, 0) / trailCoords.length;
+    const avgY = trailCoords.reduce((a, b) => a + b.y, 0) / trailCoords.length;
+    trail.style.left = avgX + "px";
+    trail.style.top = avgY + "px";
   }
 
-  animateCursor();
+  requestAnimationFrame(animateCursor);
+}
+
+animateCursor();
 
 
 
@@ -309,19 +482,17 @@ const cursor = document.querySelector(".cursor-dot");
 
 
 
-  // pre loader 
+// pre loader 
 
-  window.addEventListener("load", () => {
-    const preloader = document.querySelector(".preloader");
+window.addEventListener("load", () => {
+  const preloader = document.querySelector(".preloader");
 
-    // let the animations finish
-    setTimeout(() => {
-      preloader.classList.add("hide");
-      setTimeout(() => preloader.remove(), 500);
-    }, 1000); // total duration now matches animations
-  });
-
-
+  // let the animations finish
+  setTimeout(() => {
+    preloader.classList.add("hide");
+    setTimeout(() => preloader.remove(), 500);
+  }, 1000); // total duration now matches animations
+});
 
 
 
@@ -332,10 +503,12 @@ const cursor = document.querySelector(".cursor-dot");
 
 
 
-  // 2nd section animation 
 
 
-  // Wrap every word in a <span>
+// 2nd section animation 
+
+
+// Wrap every word in a <span>
 const h2 = document.getElementById("fascination-text");
 h2.innerHTML = h2.textContent
   .split(" ")
@@ -344,7 +517,7 @@ h2.innerHTML = h2.textContent
 
 
 
-  // Ensure GSAP and ScrollTrigger are loaded
+// Ensure GSAP and ScrollTrigger are loaded
 gsap.registerPlugin(ScrollTrigger);
 
 gsap.utils.toArray(".fascination-left .word").forEach((word, i) => {
