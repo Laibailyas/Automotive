@@ -409,14 +409,16 @@ body {
   grid-template-columns: repeat(6, 1fr);
   gap: 10px;
   padding: 32px;
-  background-color: #151619;
+  background-color: transparent;
   overflow: hidden;
+  position: relative;
+  z-index: 3;
 }
 
 .logos-wrapper div {
   width: 100%;
   padding: 50px 30px;
-  background-color: #373942;
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -1027,15 +1029,19 @@ body {
   background-color: #6a0f1b;
 }
 
-
+.service-wrapper{
+  position: relative;
+  width: 100%;
+}
 
 .service-scroll-section {
-  background-color: #151619;
   /* deep burgundy */
   color: #fff;
   padding: 8vh 0 30vh;
   /* added more space at bottom */
   position: relative;
+  background: transparent;
+  z-index: 99;
 }
 
 .service-image {
@@ -1059,6 +1065,8 @@ body {
   max-width: 900px;
   margin: 0 auto;
   padding: 0 2rem;
+  position: relative;
+  z-index: 3;
 }
 
 .service-subtitle {
@@ -1267,6 +1275,13 @@ hr {
   background-color: #151619;
   padding: 4rem 2rem 1rem;
   overflow: hidden;
+  position: relative;
+  z-index: 99;
+}
+
+.clients .container{
+  z-index: 3;
+  position: relative;
 }
 
 .clients .left-column {
