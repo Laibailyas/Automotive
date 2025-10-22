@@ -1931,7 +1931,7 @@ hr {
 .card-slider {
   position: relative;
   width: 100%;
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 
 .sliding-cards {
@@ -2456,4 +2456,5 @@ hr {
   scrollbar-width: thin;
   scrollbar-color: #E5DE00 black;
   /* thumb track */
+
 }
