@@ -1946,7 +1946,7 @@ hr {
 .card-slider {
   position: relative;
   width: 100%;
-  /* background-color: #fff; */
+  background-color: #fff;
 }
 
 .sliding-cards {
@@ -2051,7 +2051,7 @@ hr {
 }
 
 .color3 {
-  background: #2b0d0f;
+  background: #E5DE00;
   bottom: -20px;
 }
 
@@ -2062,7 +2062,7 @@ hr {
   transform: translateY(15px);
   transition: opacity 0.3s ease;
   top: 1.5rem;
-  color: #fff;
+  color: #000;
   left: 0;
   padding: 0 12px;
 }
@@ -2473,3 +2473,4 @@ hr {
   /* thumb track */
 
 }
+
