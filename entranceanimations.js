@@ -7,8 +7,8 @@ gsap.from(".hero-title", {
 });
 
 
-
-gsap.utils.toArray(".fascination-left, .fascination-right, .service-item, .moving-card").forEach((elem) => {
+// .service-item,
+gsap.utils.toArray(".fascination-left, .fascination-right,  .moving-card").forEach((elem) => {
   gsap.from(elem, {
     scrollTrigger: {
       trigger: elem,
@@ -25,17 +25,17 @@ gsap.utils.toArray(".fascination-left, .fascination-right, .service-item, .movin
 
 
 
-gsap.from(".service-item", {
-  scrollTrigger: {
-    trigger: ".service-container",
-    start: "top 80%",
-  },
-  opacity: 0,
-  y: 30,
-  duration: 0.8,
-  stagger: 0.2,
-  ease: "power2.out"
-});
+// gsap.from(".service-item", {
+//   scrollTrigger: {
+//     trigger: ".service-container",
+//     start: "top 80%",
+//   },
+//   opacity: 0,
+//   y: 30,
+//   duration: 0.8,
+//   stagger: 0.2,
+//   ease: "power2.out"
+// });
 
 
 
@@ -48,10 +48,36 @@ gsap.timeline()
 
 
 
-ScrollTrigger.batch(".service-item", {
-  onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, stagger: 0.2, duration: 1 }),
-  start: "top 85%"
+// ScrollTrigger.batch(".service-item", {
+//   onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, stagger: 0.2, duration: 1 }),
+//   start: "top 85%"
+// });
+
+// serviceIntroAnimation.js
+gsap.registerPlugin(ScrollTrigger);
+
+// Select all service items
+const allServices = gsap.utils.toArray(".service-item");
+
+// Initial hidden state
+gsap.set(allServices, { opacity: 0, y: 60 });
+
+// Fade in + slide up animation on load (only once)
+gsap.to(allServices, {
+  opacity: 1,
+  y: 0,
+  duration: 1,
+  ease: "power3.out",
+  stagger: 0.15, // delay between items
+  scrollTrigger: {
+    trigger: ".service-scroll-section",
+    start: "top 80%", // start when section comes into view
+    toggleActions: "play none none none"
+  }
 });
+
+
+
 
 // WHO WE ARE section animation
 gsap.from(".who-we-are .section-title", {

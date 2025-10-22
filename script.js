@@ -33,48 +33,6 @@ gsap.to(track, {
 
 
 
-gsap.registerPlugin(ScrollTrigger);
-
-const services = gsap.utils.toArray(".service-item");
-
-const tl = gsap.timeline({
-  scrollTrigger: {
-    trigger: ".service-scroll-section",
-    start: "top top",
-    end: "+=4500", // longer scroll range for smoother pacing
-    scrub: 0.8,    // balanced smoothness
-    pin: true,
-    anticipatePin: 1
-  }
-});
-
-
-services.forEach((service, i) => {
-  const content = service.querySelector(".service-content");
-  const image = service.querySelector(".service-image");
-
-  // Open animation
-  tl.to([content, image], {
-    maxHeight: 400,
-    opacity: 1,
-    y: 0,
-    ease: "power2.out",
-    duration: 1
-  }, "+=0.2");
-
-  // Hold
-  tl.to({}, { duration: 0.6 });
-
-  // Close animation with fadeout
-  tl.to([content, image], {
-    maxHeight: 0,
-    opacity: 0,      // smooth fade
-    y: 25,
-    ease: "power2.inOut",
-    duration: 1
-  });
-});
-
 // gsap.registerPlugin(ScrollTrigger);
 
 // const services = gsap.utils.toArray(".service-item");
@@ -83,46 +41,103 @@ services.forEach((service, i) => {
 //   scrollTrigger: {
 //     trigger: ".service-scroll-section",
 //     start: "top top",
-//     end: "+=5000", // slightly longer scroll distance for smoother pacing
-//     scrub: 1,      // smoother sync with scroll
+//     end: "+=5000", // longer scroll range for smoother pacing
+//     scrub: 0.8,    // balanced smoothness
 //     pin: true,
 //     anticipatePin: 1
 //   }
 // });
 
+
 // services.forEach((service, i) => {
 //   const content = service.querySelector(".service-content");
 //   const image = service.querySelector(".service-image");
 
-//   // Initial state
-//   gsap.set([content, image], {
+//   tl.to(content, {
+//   maxHeight: 400,
+//   opacity: 1,
+//   y: 0,
+//   ease: "power2.out",
+//   duration: 1,
+//   onStart: () => gsap.set(image, { opacity: 0, display: "block" }), // image ready
+//   onUpdate: () => {
+//     // show image gradually once content starts appearing
+//     if (content.style.opacity > 0.3) gsap.to(image, { opacity: 1, duration: 0.3 });
+//   }
+// }, "+=0.2");
+
+//   // Hold
+//   tl.to({}, { duration: 0.6 });
+
+
+//   tl.to(content, {
+//     maxHeight: 0,
 //     opacity: 0,
-//     y: 50,
-//     maxHeight: 0
+//     y: 25,
+//     ease: "power2.inOut",
+//     duration: 1,
+//     onComplete: () => gsap.to(image, { opacity: 0, duration: 0.4, onComplete: () => gsap.set(image, { display: "none" }) })
 //   });
 
-//   // Open (smooth fade + slide up)
-//   tl.to([content, image], {
-//     maxHeight: 400,
-//     opacity: 1,
-//     y: 0,
-//     ease: "power3.out",
-//     duration: 1.4,
-//     stagger: 0.15 // slight delay between image and text
-//   }, "+=0.3");
-
-//   // Hold slightly before transitioning out
-//   tl.to({}, { duration: 0.8 });
-
-//   // Smooth crossfade to next
-//   tl.to([content, image], {
-//     opacity: 0,
-//     y: -40,
-//     maxHeight: 0,
-//     ease: "power2.inOut",
-//     duration: 1.2
-//   }, "+=0.2");
 // });
+
+gsap.registerPlugin(ScrollTrigger);
+
+const services = gsap.utils.toArray(".service-item");
+
+const tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: ".service-scroll-section",
+    start: "top top",
+    end: "+=5000",
+    scrub: 0.8,
+    pin: true,
+    anticipatePin: 1
+  }
+});
+
+services.forEach((service, i) => {
+  const content = service.querySelector(".service-content");
+  const image = service.querySelector(".service-image");
+
+  tl.to(content, {
+    maxHeight: 400,
+    opacity: 1,
+    y: 0,
+    ease: "power2.out",
+    duration: 1,
+    onStart: () => gsap.set(image, { display: "block", opacity: 0 }),
+    onUpdate: function () {
+      const progress = this.progress();
+      if (progress > 0.3) gsap.to(image, { opacity: 1, duration: 0.3, overwrite: true });
+      if (progress < 0.3) gsap.to(image, { opacity: 0, duration: 0.3, overwrite: true });
+    },
+    onReverseComplete: () => gsap.set(image, { display: "none" })
+  }, "+=0.2");
+
+  // Hold
+  tl.to({}, { duration: 0.6 });
+
+  tl.to(content, {
+    maxHeight: 0,
+    opacity: 0,
+    y: 25,
+    ease: "power2.inOut",
+    duration: 1,
+    onUpdate: function () {
+      const progress = this.progress();
+      // fade image out/in smoothly in both directions
+      if (progress > 0.3) gsap.to(image, { opacity: 0, duration: 0.4, overwrite: true });
+      if (progress < 0.3) gsap.to(image, { opacity: 1, duration: 0.4, overwrite: true });
+    },
+    onComplete: () => gsap.set(image, { display: "none" }),
+    onReverseComplete: () => gsap.set(image, { display: "block", opacity: 1 })
+  });
+});
+
+
+
+
 
 
 
@@ -320,6 +335,39 @@ updateCards("none", true);
 
 
 
+function setSlidingCardsHeight() {
+  const container = document.querySelector('.sliding-cards');
+  const cards = document.querySelectorAll('.sliding-card');
+
+  if (!container || cards.length === 0) return;
+
+  const containerRect = container.getBoundingClientRect();
+
+  let minTop = Infinity;
+  let maxBottom = -Infinity;
+
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const relativeTop = rect.top - containerRect.top;
+    const relativeBottom = rect.bottom - containerRect.top;
+
+    if (relativeTop < minTop) minTop = relativeTop;
+    if (relativeBottom > maxBottom) maxBottom = relativeBottom;
+  });
+
+  const visibleHeight = maxBottom - minTop;
+
+  // Add safe padding for rotation edges
+  container.style.height = `${visibleHeight + 80}px`;
+}
+
+window.addEventListener('load', () => {
+  setTimeout(setSlidingCardsHeight, 400); // wait for transforms
+});
+
+window.addEventListener('resize', () => {
+  setTimeout(setSlidingCardsHeight, 200);
+});
 
 
 

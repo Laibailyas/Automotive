@@ -1940,7 +1940,6 @@ hr {
   align-items: center;
   width: 100%;
   position: relative;
-  /* height: 400px; */
   overflow: hidden;
 }
 
@@ -1952,6 +1951,7 @@ hr {
   position: relative;
   min-height: 100vh;
   padding-left: 48%;
+  padding-bottom: 10%;
 }
 
 .sliding-card {
